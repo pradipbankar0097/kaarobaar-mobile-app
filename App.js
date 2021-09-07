@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Button } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -67,7 +68,7 @@ export default function App() {
             {() => (
               <Tab.Navigator
                 tabBarOptions={{
-                  activeTintColor: "indianred",
+                  activeTintColor: "#F7DB15",
                   inactiveTintColor: "gray",
                 }}
               >
@@ -91,6 +92,13 @@ export default function App() {
                         options={{
                           title: "My App",
                           headerStyle: { backgroundColor: "white" },
+                          headerRight: () => (
+                            <Button
+                              onPress={() => alert('This is a button!')}
+                              title="Free Trail!"
+                              color="#f7db15"
+                            />
+                          ),
                         }}
                       >
                         {(props) => (
@@ -122,19 +130,23 @@ export default function App() {
                     </Stack.Navigator>
                   )}
                 </Tab.Screen>
-                <Tab.Screen
-                  name="Settings"
+
+                        {/* manually added */}
+                    <Tab.Screen
+                  name="Booking"
                   options={{
-                    tabBarLabel: "Settings",
+                    tabBarLabel: "Booking",
                     tabBarIcon: ({ color, size }) => (
                       <Ionicons
-                        name={"ios-options"}
+                        name={"bookmark"}
                         size={size}
                         color={color}
                       />
+                      
                     ),
                   }}
                 >
+                  
                   {() => (
                     <Stack.Navigator>
                       <Stack.Screen
@@ -146,6 +158,64 @@ export default function App() {
                     </Stack.Navigator>
                   )}
                 </Tab.Screen>
+                    {/* end manually added */}
+
+                    {/* manually added */}
+                    <Tab.Screen
+                  name="Reviews"
+                  options={{
+                    tabBarLabel: "Reviews",
+                    tabBarIcon: ({ color, size }) => (
+                      <Ionicons
+                        name={"star"}
+                        size={size}
+                        color={color}
+                      />
+                      
+                    ),
+                  }}
+                >
+                  
+                  {() => (
+                    <Stack.Navigator>
+                      <Stack.Screen
+                        name="Settings"
+                        options={{ title: "Settings", tabBarLabel: "Settings" }}
+                      >
+                        {() => <SettingsScreen setToken={setToken} />}
+                      </Stack.Screen>
+                    </Stack.Navigator>
+                  )}
+                </Tab.Screen>
+                    {/* end manually added */}
+
+                <Tab.Screen
+                  name="Settings"
+                  options={{
+                    tabBarLabel: "Account",
+                    tabBarIcon: ({ color, size }) => (
+                      <Ionicons
+                        name={"person"}
+                        size={size}
+                        color={color}
+                      />
+                      
+                    ),
+                  }}
+                >
+                  
+                  {() => (
+                    <Stack.Navigator>
+                      <Stack.Screen
+                        name="Settings"
+                        options={{ title: "Settings", tabBarLabel: "Settings" }}
+                      >
+                        {() => <SettingsScreen setToken={setToken} />}
+                      </Stack.Screen>
+                    </Stack.Navigator>
+                  )}
+                </Tab.Screen>
+                    
               </Tab.Navigator>
             )}
           </Stack.Screen>

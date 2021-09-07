@@ -15,8 +15,3 @@ Started during my training at https://www.lereacteur.io/
 ![alt text](https://github.com/frmi2018/frmi-airbnb-reactnative/blob/main/assets/Capture%20d%E2%80%99e%CC%81cran%202021-05-21%20a%CC%80%2017.01.40.png?raw=true=150x)
 ![alt text](https://github.com/frmi2018/frmi-airbnb-reactnative/blob/main/assets/Capture%20d%E2%80%99e%CC%81cran%202021-05-21%20a%CC%80%2016.58.16.png?raw=true=150x)  
 
-## Get the Code
-
-```
-$ git clone https://github.com/frmi2018/frmi-airbnb-reactnative.git
-```
