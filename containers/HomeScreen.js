@@ -6,11 +6,33 @@ import {
   Text,
   View,
   FlatList,
+  ScrollView,
+  Dimensions,
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+
+// MANUALLY ADDED PLANS DATA
+
+const DATA = [
+  {
+    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    title: 'First Item',
+  },
+  {
+    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+    title: 'Second Item',
+  },
+  {
+    id: '58694a0f-3da1-471f-bd96-145571e29d72',
+    title: 'Third Item',
+  },
+];
+
+
+// END MANUALLY ADDED PLANS DATA
 
 export default function HomeScreen({ navigation }) {
   const [data, setData] = useState(null);
@@ -46,6 +68,26 @@ export default function HomeScreen({ navigation }) {
   return isLoading ? (
     <ActivityIndicator size="large" color="indianred" />
   ) : (
+    <ScrollView>
+      {/* for events */}
+      <View
+        style={styles.eventsView}
+      >
+        <Text>Space for events</Text>
+      </View>
+      {/* end for events */}
+      <FlatList
+      data={DATA}
+      keyExtractor={(item) => item.id}
+      renderItem={
+        ({item})=>{
+          return (
+            <View>
+              <Text>{item.title}</Text>
+            </View>
+          );
+        }
+      }/>
     <FlatList
       data={data}
       keyExtractor={(item) => item._id}
@@ -86,6 +128,7 @@ export default function HomeScreen({ navigation }) {
         );
       }}
     />
+    </ScrollView>
   );
 }
 
@@ -130,4 +173,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
   },
+  eventsView:{
+    //width:'100vw',
+    height: Dimensions.get('screen').width*1.3,
+    backgroundColor:'green',
+  }
 });
