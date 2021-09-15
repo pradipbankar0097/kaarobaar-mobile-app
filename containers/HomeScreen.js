@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+
+// for firebase
+import firebase from 'firebase/app'
+import "firebase/firestore"
+
 import {
   ActivityIndicator,
   Image,
@@ -10,24 +15,61 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
+  TouchableHighlight,
+  Button,
   ImageBackground,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDVaHvaYxSIOEknWgkJniFwPhXNZuUXzY8",
+  authDomain: "kaarobaar-mobile-app.firebaseapp.com",
+  projectId: "kaarobaar-mobile-app",
+  storageBucket: "kaarobaar-mobile-app.appspot.com",
+  messagingSenderId: "1035731338707",
+  appId: "1:1035731338707:web:efee5776bfb2d95d069b26",
+  measurementId: "G-VSG6MB0S61"
+};
+
+// Initialize Firebase
+// firebase.initializeApp(firebaseConfig);
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}else {
+  firebase.app(); // if already initialized, use that one
+}
+
+export var db = firebase.firestore();
 
 // MANUALLY ADDED PLANS DATA
 
 const DATA = [
   {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
+    id: 'desksabcd',
+    title: 'DESKS',
+    price: 3490,
+    priceForDuration : 'Month',
   },
   {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
+    id: 'privatecabinsabcd',
+    title: 'PRIVATE CABINS',
+    price: 6490,
+    priceForDuration : 'Month',
   },
   {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
+    id: 'conferenceroomabcd',
+    title: 'CONFERENCE ROOMS',
+    price: 6490,
+    priceForDuration : 'Month',
+  },
+  {
+    id: 'virtualofficeabcd',
+    title: 'VIRTUAL OFFICE',
+    price: 9990,
+    priceForDuration : 'Year',
   },
 ];
 
@@ -37,6 +79,7 @@ const DATA = [
 export default function HomeScreen({ navigation }) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [plansData, setPlansData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
@@ -65,6 +108,19 @@ export default function HomeScreen({ navigation }) {
     return tab;
   };
 
+// data retrieval from firebase
+useEffect(()=>{
+  db.collection("plans").get().then((querySnapshot) => {
+          var cities = [];
+          querySnapshot.forEach((doc) => {
+              cities.push(doc.data().name);
+              setPlansData((prev) => {
+                return [...prev,doc.data()];
+              });
+          });
+      });
+    },[]);
+
   return isLoading ? (
     <ActivityIndicator size="large" color="indianred" />
   ) : (
@@ -76,18 +132,41 @@ export default function HomeScreen({ navigation }) {
         <Text>Space for events</Text>
       </View>
       {/* end for events */}
-      <FlatList
-      data={DATA}
-      keyExtractor={(item) => item.id}
-      renderItem={
-        ({item})=>{
-          return (
-            <View>
-              <Text>{item.title}</Text>
-            </View>
-          );
-        }
-      }/>
+      {plansData.map((plan)=>(
+        <View
+          key={plan.id}
+          style={{
+            padding:20,
+          }}
+        >
+          <TouchableOpacity
+            underlayColor = 'red'
+            onPress={() => {
+              navigation.navigate("Room", { roomId: plan.id });
+              console.log(`passed the paramater from home ${plan.Id}`);
+            }}
+          >
+          <View 
+            style={{
+              display:'flex',
+              flexDirection:'column',
+              alignItems:'center',
+              shadowRadius:7,
+              shadowColor:'rgba(0, 0, 0, 0.11)',
+              backgroundColor:'#EE4F4F',
+            }}
+          >
+          <View style={{paddingTop:15,}}><Text style={{ fontSize:30, fontWeight:'bold', }}>{plan.title}</Text></View>
+          <View style={{paddingTop:10,}}><Text style={{ fontSize:20, }}>STARTS AT</Text></View>
+          <View style={{paddingTop:10,paddingBottom:12, }}><Text style={{ fontSize:25, color:'#F7DB15',  }}>₹ {plan.price}/{plan.priceForDuration}</Text>
+          </View>
+          <View style={{paddingTop:8,paddingBottom:15}}><Button color='#F7DB15' title="GET WORKPLACE"/></View>
+            
+        </View>
+        </TouchableOpacity>
+        </View>
+      ))}
+      
     <FlatList
       data={data}
       keyExtractor={(item) => item._id}

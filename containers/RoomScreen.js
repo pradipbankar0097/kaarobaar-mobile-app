@@ -6,16 +6,36 @@ import {
   ScrollView,
   ImageBackground,
   ActivityIndicator,
+  TouchableOpacity,
   StyleSheet,
+  Button,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
+
+import firebase from 'firebase/app'
+import "firebase/firestore"
+import { db } from './HomeScreen';
 
 export default function RoomScreen({ route }) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [displayAllText, setDisplayAllText] = useState(false);
+  const [allPlansData, setAllPlansData] = useState([]);
 
+  useEffect(() => {
+    db.collection("plans/"+route.params.roomId+"/allplans").get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data())
+        setAllPlansData((prev) => {
+          return [...prev, doc.data()];
+        });
+      });
+      setIsLoading(false);
+    });
+  }, []);
+
+  /*
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
@@ -27,6 +47,8 @@ export default function RoomScreen({ route }) {
     };
     fetchData();
   }, []);
+  */
+  
 
   const displayStars = (value) => {
     const tab = [];
@@ -48,44 +70,40 @@ export default function RoomScreen({ route }) {
     <ActivityIndicator size="large" color="indianred" />
   ) : (
     <ScrollView>
-      <ImageBackground
-        source={{ uri: data.photos[0].url }}
-        style={styles.bgImg}
-      >
-        <View style={styles.price}>
-          <Text style={styles.priceText}>{data.price} €</Text>
-        </View>
-      </ImageBackground>
-      <View style={styles.line}>
-        <View style={styles.infosContainer}>
-          <Text numberOfLines={1} style={styles.title}>
-            {data.title}
-          </Text>
-
-          <View style={styles.rating}>
-            {displayStars(data.ratingValue)}
-            <Text style={{ marginLeft: 10, color: "grey" }}>
-              {data.reviews} reviews
-            </Text>
-          </View>
-        </View>
-        <View style={{ justifyContent: "center", marginLeft: 10 }}>
-          <Image
-            source={{ uri: data.user.account.photo.url }}
-            style={styles.profileImg}
-          />
-        </View>
-      </View>
-      <View style={styles.description}>
-        <Text
-          numberOfLines={displayAllText === false ? 3 : null}
-          onPress={() => {
-            setDisplayAllText(!displayAllText);
+      {allPlansData.map((plan)=>(
+        <View
+          key={plan.id}
+          style={{
+            padding:20,
           }}
         >
-          {data.description}
-        </Text>
-      </View>
+          <TouchableOpacity
+            underlayColor = 'red'
+            onPress={() => {
+              navigation.navigate("Room", { roomId: plan.id });
+            }}
+          >
+          <View 
+            style={{
+              display:'flex',
+              flexDirection:'column',
+              alignItems:'center',
+              shadowRadius:7,
+              shadowColor:'rgba(0, 0, 0, 0.11)',
+              backgroundColor:'#EE4F4F',
+            }}
+          >
+          <View style={{paddingTop:15,}}><Text style={{ fontSize:30, fontWeight:'bold', }}>{plan.title}</Text></View>
+          <View style={{paddingTop:10,}}><Text style={{ fontSize:20, }}>PRICE</Text></View>
+          <View style={{paddingTop:10,paddingBottom:12, }}><Text style={{ fontSize:25, color:'#F7DB15',  }}>₹ {plan.price}/{plan.priceForDuration}</Text>
+          </View>
+          <View style={{paddingTop:8,paddingBottom:15}}><Button color='#F7DB15' title="GET WORKPLACE"/></View>
+            
+        </View>
+        </TouchableOpacity>
+        </View>
+      ))}
+
     </ScrollView>
   );
 }
