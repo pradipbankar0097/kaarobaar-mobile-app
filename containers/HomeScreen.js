@@ -160,7 +160,7 @@ useEffect(()=>{
           <View style={{paddingTop:10,}}><Text style={{ fontSize:20, }}>STARTS AT</Text></View>
           <View style={{paddingTop:10,paddingBottom:12, }}><Text style={{ fontSize:25, color:'#F7DB15',  }}>₹ {plan.price}/{plan.priceForDuration}</Text>
           </View>
-          <View style={{paddingTop:8,paddingBottom:15}}><Button color='#F7DB15' title="GET WORKPLACE"/></View>
+          <View style={{paddingTop:8,paddingBottom:15}}><Button color='#F7DB15' title="SEE ALL PLANS"/></View>
             
         </View>
         </TouchableOpacity>

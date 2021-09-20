@@ -24,7 +24,7 @@ export default function RoomScreen({ route }) {
   const [allPlansData, setAllPlansData] = useState([]);
 
   useEffect(() => {
-    db.collection("plans/"+route.params.roomId+"/allplans").get().then((querySnapshot) => {
+    db.collection("plans/"+route.params.roomId+"/allplans").orderBy("price").get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         console.log(doc.data())
         setAllPlansData((prev) => {
