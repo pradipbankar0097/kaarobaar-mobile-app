@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import MyComponent from "../components/Tour.js";
+
 
 import {
   Text,
@@ -25,6 +27,7 @@ const SignUpScreen = ({ navigation, setToken }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [istourdone,setIsTourDone] = useState(false)
 
   const handleSubmit = async () => {
     if (email && username && description && password && confirmPassword) {
@@ -63,93 +66,93 @@ const SignUpScreen = ({ navigation, setToken }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior="padding"
-        style={{
-          flex: 1,
-        }}
+    istourdone?<SafeAreaView style={styles.container}>
+    <KeyboardAvoidingView
+      behavior="padding"
+      style={{
+        flex: 1,
+      }}
+    >
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContent}
       >
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollViewContent}
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          <View
-            style={{
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
+          <Logo />
+          <MainTitle title={"Sign up"} />
+        </View>
+
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Input
+            setFunction={setEmail}
+            placeholder="email"
+            secureTextEntry={false}
+          />
+
+          <Input
+            setFunction={setUsername}
+            placeholder="username"
+            secureTextEntry={false}
+          />
+
+          <LargeInput
+            setFunction={setDescription}
+            placeholder="Describe yourself in a few words..."
+            secureTextEntry={false}
+          />
+
+          <Input
+            placeholder="password"
+            secureTextEntry={true}
+            setFunction={setPassword}
+          />
+
+          <Input
+            placeholder="confirm password"
+            secureTextEntry={true}
+            setFunction={setConfirmPassword}
+          />
+        </View>
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Text style={{ color: "red", textAlign: "center", marginTop: 20 }}>
+            {error}
+          </Text>
+
+          <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
+            <Text style={styles.btnText}>Sign up</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("SignIn");
             }}
           >
-            <Logo />
-            <MainTitle title={"Sign up"} />
-          </View>
-
-          <View
-            style={{
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Input
-              setFunction={setEmail}
-              placeholder="email"
-              secureTextEntry={false}
-            />
-
-            <Input
-              setFunction={setUsername}
-              placeholder="username"
-              secureTextEntry={false}
-            />
-
-            <LargeInput
-              setFunction={setDescription}
-              placeholder="Describe yourself in a few words..."
-              secureTextEntry={false}
-            />
-
-            <Input
-              placeholder="password"
-              secureTextEntry={true}
-              setFunction={setPassword}
-            />
-
-            <Input
-              placeholder="confirm password"
-              secureTextEntry={true}
-              setFunction={setConfirmPassword}
-            />
-          </View>
-          <View
-            style={{
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text style={{ color: "red", textAlign: "center", marginTop: 20 }}>
-              {error}
+            <Text style={{ color: "grey", textAlign: "center" }}>
+              Already have an account ? Sign in
             </Text>
-
-            <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-              <Text style={styles.btnText}>Sign up</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("SignIn");
-              }}
-            >
-              <Text style={{ color: "grey", textAlign: "center" }}>
-                Already have an account ? Sign in
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  </SafeAreaView>:<MyComponent method={setIsTourDone}/>
   );
 };
 export default SignUpScreen;
