@@ -76,7 +76,7 @@ const MyAccountScreen = ({ navigation, setToken, getToken }) => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
-            aspect: [4, 3],
+            aspect: [1, 1],
             quality: 1,
         });
 
@@ -235,7 +235,7 @@ const MyAccountScreen = ({ navigation, setToken, getToken }) => {
 
                     }}
                 >
-                    {image ? <Image source={{ uri: image }} style={{ width: 200, height: 180, borderRadius: 50 }} /> : <ActivityIndicator size="large" color="blue" />}
+                    {image ? <Image source={{ uri: image }} style={{ width: 200, height: 180, borderRadius: 50 }} /> : <Image source={require('../assets/images/blank_user.jpg')} style={{ width: 200, height: 180, borderRadius: 50 }} />}
                 </View>
 
                 <View
