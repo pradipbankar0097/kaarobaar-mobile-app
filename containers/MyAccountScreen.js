@@ -24,10 +24,9 @@ import {
 import Constants from "expo-constants";
 
 
-import Logo from "../components/Logo.js";
-import MainTitle from "../components/MainTitle.js";
+
 import Input from "../components/Input.js";
-import LargeInput from "../components/LargeInput.js";
+
 
 const MyAccountScreen = ({ navigation, setToken, getToken }) => {
     const [details, setDetails] = useState({
@@ -93,7 +92,7 @@ const MyAccountScreen = ({ navigation, setToken, getToken }) => {
     const uploadImage = async (uri) => {
         const response = await fetch(uri);
         const blob = await response.blob();
-        var ref = firebase.storage().ref().child("images/userid/profilepic/img");
+        var ref = firebase.storage().ref().child("images/" + getToken() + "/profilepic/img");
 
         return ref.put(blob);
     }
@@ -195,14 +194,19 @@ const MyAccountScreen = ({ navigation, setToken, getToken }) => {
                 console.log("Error getting document:", error);
             });
 
-            let imageRef = firebase.storage().ref("images/userid/profilepic/img");
+            let imageRef = firebase.storage().ref("images/" + str + "/profilepic/img");
             imageRef
                 .getDownloadURL()
                 .then((url) => {
                     //from url you can fetched the uploaded image easily
                     setImage(url);
                 })
-                .catch((e) => console.log('getting downloadURL of image error => ', e));
+                .catch((error) => {
+                    setImage(null);
+                    console.log(error)
+
+
+                });
 
 
         }
