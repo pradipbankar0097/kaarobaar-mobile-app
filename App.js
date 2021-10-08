@@ -13,6 +13,15 @@ import SignInScreen from "./containers/SignInScreen";
 import SignUpScreen from "./containers/SignUpScreen";
 import SettingsScreen from "./containers/SettingsScreen";
 import RoomScreen from "./containers/RoomScreen";
+import ContactUsScreen from "./containers/ContactUsScreen";
+import AboutUsScreen from "./containers/AboutUsScreen";
+import MyAccountScreen from "./containers/MyAccountScreen";
+
+// for firebase
+import firebase from 'firebase/app'
+import "firebase/firestore"
+
+
 
 // Components
 import Logo from "./components/Logo.js";
@@ -21,9 +30,29 @@ import GoBack from "./components/GoBack.js";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
+
+
+// Initialize Firebase
+// firebase.initializeApp(firebaseConfig);
+
+
+
+
+
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [userToken, setUserToken] = useState(null);
+  const getToken = () => {
+    if (userToken) {
+      return userToken;
+    }
+    else {
+      setToken(null);
+      return false;
+    }
+
+
+  }
   const setToken = async (token) => {
     if (token) {
       await AsyncStorage.setItem("userToken", token);
@@ -131,9 +160,10 @@ export default function App() {
                   )}
                 </Tab.Screen>
 
-                        {/* manually added */}
-                    <Tab.Screen
+                {/* manually added */}
+                {/* <Tab.Screen
                   name="Booking"
+                  getToken={getToken}
                   options={{
                     tabBarLabel: "Booking",
                     tabBarIcon: ({ color, size }) => (
@@ -142,11 +172,11 @@ export default function App() {
                         size={size}
                         color={color}
                       />
-                      
+
                     ),
                   }}
                 >
-                  
+
                   {() => (
                     <Stack.Navigator>
                       <Stack.Screen
@@ -157,11 +187,111 @@ export default function App() {
                       </Stack.Screen>
                     </Stack.Navigator>
                   )}
-                </Tab.Screen>
-                    {/* end manually added */}
+                </Tab.Screen> */}
+                {/* end manually added */}
 
-                    {/* manually added */}
-                    <Tab.Screen
+                {/* ////////////////////////////////////////////////////////////////////////////////////////////// */}
+                {/* manually added */}
+                <Tab.Screen
+                  name="temp"
+                  options={{
+                    tabBarLabel: "Reviews",
+                    tabBarIcon: ({ color, size }) => (
+                      <Ionicons
+                        name={"person"}
+                        size={size}
+                        color={color}
+                      />
+
+                    ),
+                  }}
+                >
+
+                  {() => (
+
+                    <Stack.Navigator
+                      screenOptions={{
+                        headerTitle: () => <Logo size="small" />,
+                      }}
+                    >
+                      <Stack.Screen
+                        name="Home"
+                        options={{
+                          title: "My App",
+                          headerStyle: { backgroundColor: "white" },
+                          headerRight: () => (
+                            <Button
+                              onPress={() => alert('This is a button!')}
+                              title="Free Trail!"
+                              color="#f7db15"
+                            />
+                          ),
+                        }}
+                      >
+                        {(props) => (
+                          <SettingsScreen {...props} setToken={setToken} />
+                        )}
+                      </Stack.Screen>
+
+                      <Stack.Screen
+                        name="Room"
+                        options={{
+                          title: "Room",
+
+                          headerLeft: () => <GoBack />,
+                        }}
+                      >
+                        {(props) => (
+                          <ContactUsScreen {...props} setToken={setToken} />
+                        )}
+                      </Stack.Screen>
+                      <Stack.Screen
+                        name="ContactUsScreen"
+                        options={{
+                          title: "Contact us",
+                        }}
+                      >
+                        {() => <ContactUsScreen />}
+
+                      </Stack.Screen>
+                      <Stack.Screen
+                        name="AboutUsScreen"
+                        options={{
+                          title: "About us",
+                        }}
+                      >
+                        {() => <AboutUsScreen />}
+
+                      </Stack.Screen>
+                      <Stack.Screen
+                        name="MyAccountScreen"
+                        options={{
+                          title: "My Account",
+                        }}
+                      >
+                        {(props) => (
+                          <MyAccountScreen {...props} setToken={setToken} getToken={getToken} />
+                        )}
+                      </Stack.Screen>
+                      {/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
+                      <Stack.Screen
+                        name="Profile"
+                        options={{
+                          title: "User Profile",
+                        }}
+                      >
+                        {() => <ProfileScreen />}
+                      </Stack.Screen>
+                    </Stack.Navigator>
+                  )}
+                </Tab.Screen>
+                {/* end manually added */}
+
+
+
+
+                {/* manually added */}
+                {/* <Tab.Screen
                   name="Reviews"
                   options={{
                     tabBarLabel: "Reviews",
@@ -171,11 +301,11 @@ export default function App() {
                         size={size}
                         color={color}
                       />
-                      
+
                     ),
                   }}
                 >
-                  
+
                   {() => (
                     <Stack.Navigator>
                       <Stack.Screen
@@ -186,10 +316,10 @@ export default function App() {
                       </Stack.Screen>
                     </Stack.Navigator>
                   )}
-                </Tab.Screen>
-                    {/* end manually added */}
+                </Tab.Screen> */}
+                {/* end manually added */}
 
-                <Tab.Screen
+                {/* <Tab.Screen
                   name="Settings"
                   options={{
                     tabBarLabel: "Account",
@@ -199,11 +329,11 @@ export default function App() {
                         size={size}
                         color={color}
                       />
-                      
+
                     ),
                   }}
                 >
-                  
+
                   {() => (
                     <Stack.Navigator>
                       <Stack.Screen
@@ -214,8 +344,8 @@ export default function App() {
                       </Stack.Screen>
                     </Stack.Navigator>
                   )}
-                </Tab.Screen>
-                    
+                </Tab.Screen> */}
+
               </Tab.Navigator>
             )}
           </Stack.Screen>

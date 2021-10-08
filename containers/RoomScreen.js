@@ -15,7 +15,16 @@ import axios from "axios";
 
 import firebase from 'firebase/app'
 import "firebase/firestore"
-import { db } from './HomeScreen';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDVaHvaYxSIOEknWgkJniFwPhXNZuUXzY8",
+  authDomain: "kaarobaar-mobile-app.firebaseapp.com",
+  projectId: "kaarobaar-mobile-app",
+  storageBucket: "kaarobaar-mobile-app.appspot.com",
+  messagingSenderId: "1035731338707",
+  appId: "1:1035731338707:web:efee5776bfb2d95d069b26",
+  measurementId: "G-VSG6MB0S61"
+};
 
 export default function RoomScreen({ route }) {
   const [data, setData] = useState(null);
@@ -24,6 +33,15 @@ export default function RoomScreen({ route }) {
   const [allPlansData, setAllPlansData] = useState([]);
 
   useEffect(() => {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    } else {
+      firebase.app(); // if already initialized, use that one
+    }
+    // firebase.initializeApp(firebaseConfig);
+    // firebase.app();
+    var db = firebase.firestore();
+
     db.collection("plans/"+route.params.roomId+"/allplans").orderBy("price").get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         console.log(doc.data())

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import MyCarousel from "../components/Carousel";
+import firebase from "firebase/app";
+import 'firebase/firestore' 
 
 
-// for firebase
-import firebase from 'firebase/app'
-import "firebase/firestore"
+
 
 import {
   ActivityIndicator,
@@ -21,10 +21,9 @@ import {
   Button,
   ImageBackground,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "react-native/Libraries/NewAppScreen";
-
-
+// MANUALLY ADDED PLANS DATA
 const firebaseConfig = {
   apiKey: "AIzaSyDVaHvaYxSIOEknWgkJniFwPhXNZuUXzY8",
   authDomain: "kaarobaar-mobile-app.firebaseapp.com",
@@ -34,19 +33,6 @@ const firebaseConfig = {
   appId: "1:1035731338707:web:efee5776bfb2d95d069b26",
   measurementId: "G-VSG6MB0S61"
 };
-
-// Initialize Firebase
-// firebase.initializeApp(firebaseConfig);
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-} else {
-  firebase.app(); // if already initialized, use that one
-}
-
-export var db = firebase.firestore();
-
-// MANUALLY ADDED PLANS DATA
 
 const DATA = [
   {
@@ -82,23 +68,23 @@ export default function HomeScreen({ navigation }) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [plansData, setPlansData] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get(
-        "https://express-airbnb-api.herokuapp.com/rooms"
-      );
-      setData(response.data);
-      setIsLoading(false);
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await axios.get(
+  //       "https://express-airbnb-api.herokuapp.com/rooms"
+  //     );
+  //     setData(response.data);
+  //     setIsLoading(false);
+  //   };
+  //   fetchData();
+  // }, []);
 
   const displayStars = (value) => {
     const tab = [];
 
     for (let i = 1; i <= 5; i++) {
       tab.push(
-        <FontAwesome
+        <Ionicons
           name="star"
           size={24}
           color={i <= value ? "goldenrod" : "grey"}
@@ -112,6 +98,16 @@ export default function HomeScreen({ navigation }) {
 
   // data retrieval from firebase
   useEffect(() => {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+      firebase.app();
+    } else {
+      firebase.app(); // if already initialized, use that one
+    }
+    // firebase.initializeApp(firebaseConfig);
+    // firebase.app();
+    var db = firebase.firestore();
+
     db.collection("plans").get().then((querySnapshot) => {
       var cities = [];
       querySnapshot.forEach((doc) => {
@@ -121,6 +117,7 @@ export default function HomeScreen({ navigation }) {
         });
       });
     });
+    setIsLoading(false);
   }, []);
 
   return isLoading ? (

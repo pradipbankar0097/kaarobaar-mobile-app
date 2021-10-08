@@ -1,15 +1,13 @@
 import React from "react";
 import { StyleSheet, TextInput } from "react-native";
+// import { baseProps } from "react-native-gesture-handler/lib/typescript/handlers/gestureHandlers";
 
-const Input = ({ setFunction, placeholder, secureTextEntry }) => {
+const Input = (props) => {
   return (
     <TextInput
+      {...props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
       style={styles.input}
-      placeholder={placeholder}
-      onChangeText={(text) => {
-        setFunction(text);
-      }}
-      secureTextEntry={secureTextEntry}
+
     />
   );
 };
