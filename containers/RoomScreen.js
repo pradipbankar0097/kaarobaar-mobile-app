@@ -111,6 +111,7 @@ export default function RoomScreen({ route,getToken }) {
           userid : userId,
     });
     console.log("Booking done with Id : ");
+    alert("Booking done!");
   }
 
   /*

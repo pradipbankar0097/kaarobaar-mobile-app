@@ -27,6 +27,9 @@ import "firebase/firestore"
 import Logo from "./components/Logo.js";
 import GoBack from "./components/GoBack.js";
 
+import { LogBox } from "react-native";
+
+LogBox.ignoreAllLogs(true);
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
