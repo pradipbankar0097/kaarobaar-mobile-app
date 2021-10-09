@@ -144,7 +144,7 @@ export default function App() {
                         }}
                       >
                         {(props) => (
-                          <RoomScreen {...props} setToken={setToken} />
+                          <RoomScreen {...props} setToken={setToken} getToken={getToken} />
                         )}
                       </Stack.Screen>
 

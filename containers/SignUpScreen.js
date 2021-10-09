@@ -95,11 +95,11 @@ const SignUpScreen = ({ navigation, setToken }) => {
             gender: '',
             social_profiles: [],
             designation: '',
-
-
-
-
-          }).then(() => { console.log('done at least think soo') }).catch((error) => { console.log(error) })
+          }).then(() => { 
+            db.collection("bookings").doc(user.uid).set({present : true})
+        .then(()=>{console.log("new doc added")})
+        .catch((error)=>{console.log("error is there")});
+            console.log('done at least think soo') }).catch((error) => { console.log(error) })
 
           // ...
         })
@@ -110,6 +110,7 @@ const SignUpScreen = ({ navigation, setToken }) => {
           console.log(errorMessage);
           // ..
         });
+        
       // setError("");
       // if (password === confirmPassword) {
       //   setError("");
