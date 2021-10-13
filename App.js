@@ -28,6 +28,7 @@ import Logo from "./components/Logo.js";
 import GoBack from "./components/GoBack.js";
 
 import { LogBox } from "react-native";
+import BookingScreen from "./containers/BookingScreen";
 
 LogBox.ignoreAllLogs(true);
 const Tab = createBottomTabNavigator();
@@ -164,7 +165,7 @@ export default function App() {
                 </Tab.Screen>
 
                 {/* manually added */}
-                {/* <Tab.Screen
+                <Tab.Screen
                   name="Booking"
                   getToken={getToken}
                   options={{
@@ -183,22 +184,22 @@ export default function App() {
                   {() => (
                     <Stack.Navigator>
                       <Stack.Screen
-                        name="Settings"
-                        options={{ title: "Settings", tabBarLabel: "Settings" }}
+                        name="MyBookings"
+                        options={{ title: "MyBookings", tabBarLabel: "MyBookins" }}
                       >
-                        {() => <SettingsScreen setToken={setToken} />}
+                        {() => <BookingScreen getToken={getToken} setToken={setToken} />}
                       </Stack.Screen>
                     </Stack.Navigator>
                   )}
-                </Tab.Screen> */}
+                </Tab.Screen>
                 {/* end manually added */}
 
                 {/* ////////////////////////////////////////////////////////////////////////////////////////////// */}
                 {/* manually added */}
                 <Tab.Screen
-                  name="temp"
+                  name="MyAccount"
                   options={{
-                    tabBarLabel: "Reviews",
+                    tabBarLabel: "My Account",
                     tabBarIcon: ({ color, size }) => (
                       <Ionicons
                         name={"person"}
