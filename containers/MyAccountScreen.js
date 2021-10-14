@@ -84,8 +84,6 @@ const MyAccountScreen = ({ navigation, setToken, getToken }) => {
 
         if (!result.cancelled) {
             setImage(result.uri);
-            uploadImage(result.uri);
-
         }
     };
 
@@ -107,7 +105,10 @@ const MyAccountScreen = ({ navigation, setToken, getToken }) => {
             var app = firebase.app(); // if already initialized, use that one
         }
 
-        pickImage();
+       if(image) {uploadImage(image);}
+       else{
+           alert("Choose an Image!");
+       }
 
     }
 
@@ -150,12 +151,13 @@ const MyAccountScreen = ({ navigation, setToken, getToken }) => {
         }).then(() => { console.log('done updating user info') }).catch((error) => { console.log(error) })
 
 
-
+        handleImageUpload();
 
     }
 
 
     useEffect(() => {
+        setIsLoading(true);
 
         if (!firebase.apps.length) {
 
@@ -187,11 +189,14 @@ const MyAccountScreen = ({ navigation, setToken, getToken }) => {
 
                     })
                 } else {
+                    
                     // doc.data() will be undefined in this case
                     console.log("No such document!");
                 }
             }).catch((error) => {
                 console.log("Error getting document:", error);
+             
+                alert("Failed to fetch credentialse");
             });
 
             let imageRef = firebase.storage().ref("images/" + str + "/profilepic/img");
@@ -302,7 +307,7 @@ const MyAccountScreen = ({ navigation, setToken, getToken }) => {
 
                 <View style={{ alignItems: 'center' }}>
 
-                    <TouchableOpacity style={styles.btn} onPress={handleImageUpload}>
+                    <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
                         <Text style={styles.btnText}>Update</Text>
                     </TouchableOpacity>
 

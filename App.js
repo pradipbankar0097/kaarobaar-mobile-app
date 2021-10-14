@@ -6,7 +6,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 
-// Containers
 import HomeScreen from "./containers/HomeScreen";
 import ProfileScreen from "./containers/ProfileScreen";
 import SignInScreen from "./containers/SignInScreen";
@@ -16,28 +15,15 @@ import RoomScreen from "./containers/RoomScreen";
 import ContactUsScreen from "./containers/ContactUsScreen";
 import AboutUsScreen from "./containers/AboutUsScreen";
 import MyAccountScreen from "./containers/MyAccountScreen";
+import ChangePasswordScreen from "./containers/ChangePasswordScreen";
 
-// for firebase
 import firebase from 'firebase/app'
 import "firebase/firestore"
-
-
-
-// Components
 import Logo from "./components/Logo.js";
 import GoBack from "./components/GoBack.js";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
-
-
-
-// Initialize Firebase
-// firebase.initializeApp(firebaseConfig);
-
-
-
-
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -66,6 +52,7 @@ export default function App() {
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
+      
       // We should also handle error for production apps
       const userToken = await AsyncStorage.getItem("userToken");
 
@@ -252,6 +239,15 @@ export default function App() {
                         }}
                       >
                         {() => <ContactUsScreen />}
+
+                      </Stack.Screen>
+                      <Stack.Screen
+                        name="ChangePasswordScreen"
+                        options={{
+                          title: "Change Password",
+                        }}
+                      >
+                        {() => <ChangePasswordScreen />}
 
                       </Stack.Screen>
                       <Stack.Screen

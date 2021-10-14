@@ -15,6 +15,7 @@ import {
   TouchableOpacity,
   View,
   KeyboardAvoidingView,
+  ActivityIndicator
 } from "react-native";
 import Constants from "expo-constants";
 import axios from "axios";
@@ -34,7 +35,6 @@ const firebaseConfig = {
 };
 
 const SignUpScreen = ({ navigation, setToken }) => {
-
   const [details, setDetails] = useState(
     {
       'email': '',
@@ -56,7 +56,8 @@ const SignUpScreen = ({ navigation, setToken }) => {
 
 
   const [error, setError] = useState("");
-  const [istourdone, setIsTourDone] = useState(false)
+  const [istourdone, setIsTourDone] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
   const handleSubmit = async () => {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
@@ -99,7 +100,11 @@ const SignUpScreen = ({ navigation, setToken }) => {
 
 
 
-          }).then(() => { console.log('done at least think soo') }).catch((error) => { console.log(error) })
+          }).then(() => {
+            console.log('done at least think soo');
+
+
+          }).catch((error) => { console.log(error) })
 
           // ...
         })
@@ -110,35 +115,7 @@ const SignUpScreen = ({ navigation, setToken }) => {
           console.log(errorMessage);
           // ..
         });
-      // setError("");
-      // if (password === confirmPassword) {
-      //   setError("");
-      //   try {
-      //     /* Requete serveur */
 
-      //     const response = await axios.post(
-      //       "https://express-airbnb-api.herokuapp.com/user/sign_up",
-      //       { email, username, password, description }
-      //     );
-      //     console.log(response.data);
-      //     if (response.data.token) {
-      //       setToken(response.data.token);
-      //     }
-      //   } catch (error) {
-      //     if (
-      //       error.response.data.error ===
-      //         "This email already has an account." ||
-      //       error.response.data.error ===
-      //         "This username already has an account."
-      //     ) {
-      //       setError(error.response.data.error);
-      //     } else {
-      //       setError("An error occured");
-      //     }
-      //   }
-      // } else {
-      //   setError("Password must be the same");
-      // }
     } else {
       setError("Please fill all fields");
       console.log(details.email, details.password, details.confirm_password)
@@ -146,102 +123,101 @@ const SignUpScreen = ({ navigation, setToken }) => {
   };
 
   return (
-    istourdone ? <SafeAreaView style={styles.container}>
+    isloading ? <View style={{ flex: 1, alignItems: 'center', justifyContent: "center" }}><ActivityIndicator size="large" color="blue" /></View> :
 
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollViewContent}
-      >
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-            paddingBottom: 20
-          }}
+      istourdone ? <SafeAreaView style={styles.container}>
+
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollViewContent}
         >
-          <Logo />
-          <MainTitle title={"Sign up"} />
-        </View>
-
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 20
-          }}
-        >
-
-
-
-          <Input
-
-
-
-            value={details.email}
-            placeholder={'email'}
-            onChangeText={text => { onDetailsChange('email', text) }}
-            secureTextEntry={false}
-          />
-          <Input
-
-
-
-            value={details.name}
-            placeholder={'name'}
-            onChangeText={text => { onDetailsChange('name', text) }}
-            secureTextEntry={false}
-          />
-          <Input
-
-
-
-            value={details.password}
-            placeholder={'password'}
-
-            onChangeText={text => { onDetailsChange('password', text) }}
-            secureTextEntry={true}
-          />
-
-          <Input
-
-
-
-            value={details.confirm_password}
-            placeholder={'confirm password'}
-            onChangeText={text => { onDetailsChange('confirm_password', text) }}
-            secureTextEntry={true}
-          />
-        </View>
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ color: "red", textAlign: "center", marginTop: 20 }}>
-            {error}
-          </Text>
-
-          <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-            <Text style={styles.btnText}>Sign up</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("SignIn");
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+              paddingBottom: 20
             }}
           >
-            <Text style={{ color: "grey", textAlign: "center" }}>
-              Already have an account ? Sign in
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+            <Logo />
+            <MainTitle title={"Sign up"} />
+          </View>
 
-    </SafeAreaView> : <MyComponent method={setIsTourDone} />
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 20
+            }}
+          >
+
+
+
+            <Input
+              value={details.email}
+              placeholder={'email'}
+              onChangeText={text => { onDetailsChange('email', text) }}
+              secureTextEntry={false}
+            />
+            <Input
+
+
+
+              value={details.name}
+              placeholder={'name'}
+              onChangeText={text => { onDetailsChange('name', text) }}
+              secureTextEntry={false}
+            />
+            <Input
+
+
+
+              value={details.password}
+              placeholder={'password'}
+
+              onChangeText={text => { onDetailsChange('password', text) }}
+              secureTextEntry={true}
+            />
+
+            <Input
+
+
+
+              value={details.confirm_password}
+              placeholder={'confirm password'}
+              onChangeText={text => { onDetailsChange('confirm_password', text) }}
+              secureTextEntry={true}
+            />
+          </View>
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ color: "red", textAlign: "center", marginTop: 20 }}>
+              {error}
+            </Text>
+
+            <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
+              <Text style={styles.btnText}>Sign up</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("SignIn");
+              }}
+            >
+              <Text style={{ color: "grey", textAlign: "center" }}>
+                Already have an account ? Sign in
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+
+      </SafeAreaView> : <MyComponent method={setIsTourDone} />
   );
 };
 export default SignUpScreen;

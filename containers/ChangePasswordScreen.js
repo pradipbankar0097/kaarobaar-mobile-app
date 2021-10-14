@@ -18,13 +18,19 @@ import firebase from "firebase/app";
 import 'firebase/firestore'
 import 'firebase/auth'
 
-export default SignInScreen = ({ navigation, setToken }) => {
 
+const ChangePasswordScreen = ({ navigation, setToken }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [details, setDetails] = useState({
-    'email': "",
-    'password': ""
-  });
+  const [details, setDetails] = useState(
+    {
+
+      'old_password': "",
+      'new_password': ""
+
+    }
+  )
   const onDetailsChange = (name, value) => {
     setDetails((prev) => {
       return {
@@ -33,36 +39,53 @@ export default SignInScreen = ({ navigation, setToken }) => {
       }
 
     })
-  };
+  }
 
   const handleSubmit = async () => {
-    if (details.email && details.password) {
-      setError('');
-
-
-
-      firebase.auth().signInWithEmailAndPassword(details.email, details.password)
-        .then((userCredential) => {
-          // Signed in
-          var user = userCredential.user;
-          setToken(user.uid);
-          navigation.navigate('HomeScreen');
-          // ...
-        })
-        .catch((error) => {
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          setError(errorMessage);
-        });
+    setError("");
+    if (details.new_password == details.old_password) {
+      alert("Choose a different password!");
     }
     else {
-      setError("Don't leave any fields empty!");
+      const user = firebase.auth().currentUser;
+
+      // TODO(you): prompt the user to re-provide their sign-in credentials
+      const credential = firebase.auth.EmailAuthProvider.credential(user.email, details.old_password);
+
+      user.reauthenticateWithCredential(credential).then(() => {
+
+        user.updatePassword(details.new_password).then(() => {
+          setError('password changed successfully');
+
+        }).catch((error) => {
+          setError('Try Again!');
+        });
+      }).catch((error) => {
+        setError(`${error}`);
+      });
+      setDetails((pv) => {
+        return {
+          ...pv,
+          'new_password': "",
+          'old_password': ""
+        }
+      });
+
+
+
+
+
+
+
+
 
     }
+
   };
+
   return (
     <SafeAreaView style={styles.container}>
-      <View
+      <KeyboardAvoidingView
         behavior="padding"
         style={{
           flex: 2,
@@ -76,7 +99,7 @@ export default SignInScreen = ({ navigation, setToken }) => {
           }}
         >
           <Logo />
-          <MainTitle title={"Sign in"} />
+          <MainTitle title={"Change Password"} />
         </View>
 
         <View
@@ -87,23 +110,24 @@ export default SignInScreen = ({ navigation, setToken }) => {
           }}
         >
           <Input
-            value={details.email}
-            placeholder={'email'}
-            onChangeText={text => { onDetailsChange('email', text) }}
-            secureTextEntry={false}
 
 
+            value={details.old_password}
+            placeholder={'current password'}
+            onChangeText={text => { onDetailsChange('old_password', text) }}
+            secureTextEntry={true}
           />
 
           <Input
-            value={details.password}
-            placeholder={'password'}
-            onChangeText={text => { onDetailsChange('password', text) }}
-            secureTextEntry={true}
+            placeholder="New Password"
 
+            value={details.new_password}
+            placeholder={'new password'}
+            onChangeText={text => { onDetailsChange('new_password', text) }}
+            secureTextEntry={true}
           />
         </View>
-      </View>
+      </KeyboardAvoidingView>
       <View
         style={{
           flex: 1,
@@ -111,27 +135,19 @@ export default SignInScreen = ({ navigation, setToken }) => {
           justifyContent: "center",
         }}
       >
-        <Text style={{ color: "red", textAlign: "center" }}>{error}</Text>
+        <Text style={{ color: "red", textAlign: "center", padding: 10, fontSize: 18 }}>{error}</Text>
 
         <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-          <Text style={styles.btnText}>Sign in</Text>
+          <Text style={styles.btnText}>Update</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("SignUp");
-          }}
-        >
-          <Text style={{ color: "grey", textAlign: "center" }}>
-            No account ? Register
-          </Text>
-        </TouchableOpacity>
+
       </View>
     </SafeAreaView>
   );
-
 };
 
+export default ChangePasswordScreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -35,7 +35,7 @@ export default function SettingsScreen({ navigation, setToken }) {
 
 
           </Pressable>
-          <Pressable onPress={() => { setPass(true) }} style={styles.Pressable}>
+          <Pressable onPress={() => { navigation.navigate('ChangePasswordScreen')}} style={styles.Pressable}>
             <View style={styles.rowitem}>
               <View style={styles.icons}><Ionicons
                 name='key-outline'
