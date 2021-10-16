@@ -26,11 +26,19 @@ const firebaseConfig = {
   measurementId: "G-VSG6MB0S61"
 };
 
-export default function RoomScreen({ route }) {
+export default function RoomScreen({ route,getToken }) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [displayAllText, setDisplayAllText] = useState(false);
   const [allPlansData, setAllPlansData] = useState([]);
+  const [details, setDetails] = useState({
+    'email': '',
+    'name': '',
+    'company_name': '',
+    'designation': '',
+    'phone': '',
+    'gender': '',
+  });
 
   useEffect(() => {
     if (!firebase.apps.length) {
@@ -43,7 +51,7 @@ export default function RoomScreen({ route }) {
     var db = firebase.firestore();
 
     db.collection("plans/"+route.params.roomId+"/allplans").orderBy("price").get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
+        querySnapshot.forEach((doc) => {
         console.log(doc.data())
         setAllPlansData((prev) => {
           return [...prev, doc.data()];
@@ -51,7 +59,60 @@ export default function RoomScreen({ route }) {
       });
       setIsLoading(false);
     });
+
+    if (getToken() != null) {
+      var str = getToken();
+
+      var docRef = db.collection('users').doc(str);
+
+      docRef.get().then((doc) => {
+          if (doc.exists) {
+              console.log("Document data new:", doc.data());
+              var obj = doc.data()
+              setDetails((prev) => {
+                  return {
+                      ...prev,
+                      ...obj,
+
+                  }
+
+              })
+          } else {
+              // doc.data() will be undefined in this case
+              console.log("No such document!");
+          }
+      }).catch((error) => {
+          console.log("Error getting document:", error);
+      });
+    }
+
   }, []);
+
+  const bookThisPlan = async(e,planId,title,price,priceForDuration) => {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    } else {
+      firebase.app(); // if already initialized, use that one
+    }
+    // firebase.initializeApp(firebaseConfig);
+    // firebase.app();
+    var db = firebase.firestore();
+    const userId = getToken();
+    const myBooking1 = await db.collection(`bookings/${userId}/mybookings`).add({
+          confirmed : false,
+          depositeamount : 0,
+          durationnumber : 2,
+          durationper : priceForDuration,
+          name : details.name,
+          outstanding : 0,
+          paidamount : price,
+          planid : planId,
+          title : title,
+          userid : userId,
+    });
+    console.log("Booking done with Id : ");
+    alert("Booking done!");
+  }
 
   /*
   useEffect(() => {
@@ -68,21 +129,6 @@ export default function RoomScreen({ route }) {
   */
   
 
-  const displayStars = (value) => {
-    const tab = [];
-
-    for (let i = 1; i <= 5; i++) {
-      tab.push(
-        <FontAwesome
-          name="star"
-          size={24}
-          color={i <= value ? "goldenrod" : "grey"}
-          key={i}
-        />
-      );
-    }
-    return tab;
-  };
 
   return isLoading ? (
     <ActivityIndicator size="large" color="indianred" />
@@ -95,13 +141,8 @@ export default function RoomScreen({ route }) {
             padding:20,
           }}
         >
-          <TouchableOpacity
-            underlayColor = 'red'
-            onPress={() => {
-              navigation.navigate("Room", { roomId: plan.id });
-            }}
-          >
           <View 
+            key={plan.id}
             style={{
               display:'flex',
               flexDirection:'column',
@@ -115,10 +156,9 @@ export default function RoomScreen({ route }) {
           <View style={{paddingTop:10,}}><Text style={{ fontSize:20, }}>PRICE</Text></View>
           <View style={{paddingTop:10,paddingBottom:12, }}><Text style={{ fontSize:25, color:'#F7DB15',  }}>₹ {plan.price}/{plan.priceForDuration}</Text>
           </View>
-          <View style={{paddingTop:8,paddingBottom:15}}><Button color='#F7DB15' title="GET WORKPLACE"/></View>
+          <View style={{paddingTop:8,paddingBottom:15}}><Button color='#F7DB15' onPress={ (e)=>{bookThisPlan(e,plan.id,plan.title,plan.price,plan.priceForDuration)} } title="GET WORKPLACE"/></View>
             
         </View>
-        </TouchableOpacity>
         </View>
       ))}
 
