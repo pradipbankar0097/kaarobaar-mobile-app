@@ -1,5 +1,5 @@
 import React from 'react'
-import { View,StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import PropTypes from 'prop-types'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -12,24 +12,24 @@ const BookingCard = props => {
                 style={styles.card}
             >
                 <Text
-                    style={{alignContent:'center',justifyContent:'center',fontSize:20,fontWeight:"bold"}}
+                    style={{ alignContent: 'center', justifyContent: 'center', fontSize: 20, fontWeight: "bold" }}
                 >{props.booking.title}</Text>
                 <Text>
                     Paid: ₹{props.booking.paidamount}
                 </Text>
                 <TouchableOpacity
                     style={{
-                        borderRadius:10,
-                        height:30,
-                        width:120,
-                        backgroundColor:'#EE4F4F',
-                        justifyContent:'center',
-                        alignItems:'center',
-                        elevation:5,
+                        borderRadius: 10,
+                        height: 30,
+                        width: 120,
+                        backgroundColor: '#EE4F4F',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        elevation: 5,
                     }}
-                >
+                    onPress={() => { props.method() }}>
                     <Text
-                        style={{color:'white',fontWeight:'bold'}}
+                        style={{ color: 'white', fontWeight: 'bold' }}
                     >
                         GET INVOICE
                     </Text>
@@ -40,24 +40,24 @@ const BookingCard = props => {
 }
 
 const styles = StyleSheet.create({
-    maincard:{
-        padding:10,
+    maincard: {
+        padding: 10,
 
     },
-    card:{
-        borderRadius:10,
-        backgroundColor:'#00ff00',
-        display:'flex',
-        flexDirection:'column',
-        alignItems:'center',
-        justifyContent:'center',
-        padding:10,
-        elevation:5,
+    card: {
+        borderRadius: 10,
+        backgroundColor: '#00ff00',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10,
+        elevation: 5,
     }
 });
 
 BookingCard.propTypes = {
-    booking : PropTypes.object,
+    booking: PropTypes.object,
 }
 
 export default BookingCard
