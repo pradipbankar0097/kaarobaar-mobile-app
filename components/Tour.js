@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         height: null
     },
     loginButton: {
-        marginBottom:20 ,
+        marginBottom: 20,
         width: '100%'
     }
 });
@@ -73,29 +73,14 @@ const MyComponent = (props) => (
 
 
         </View>
-        <View style={[styles.slide, styles.slide2]}>
-            <Text style={styles.text}>
-                slide n°2
-            </Text>
-        </View>
-        <View style={[styles.slide, styles.slide3]}>
-            <View style={styles.bakcgroundImage}>
-                <Image style={{ height: '100%', width: '100%' }} source={require('../assets/tour_images/img.png')} />
 
-            </View>
 
-            <View style={{ marginBottom: 40 }}>
-                <Button onPress={() => { props.method(true) }} title='Get started' color="white" />
-
-            </View>
-
-        </View>
         <View style={styles.container}>
             <View style={styles.backgroundContainer}>
-                <Image style={styles.bakcgroundImage} source={require('../assets/tour_images/img.png')} />
+                <Image style={styles.bakcgroundImage} source={require('../assets/tour_images/img1.png')} />
             </View>
             <View style={styles.loginButton}>
-                <Button onPress={() => { props.method(true) }} title='Get started' color="white" />
+                <Button onPress={() => { props.method(true) }} title='Get started' color="grey" />
 
             </View>
         </View>
