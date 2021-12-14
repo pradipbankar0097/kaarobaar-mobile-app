@@ -14,9 +14,12 @@ const BookingCard = props => {
                 <Text
                     style={{ alignContent: 'center', justifyContent: 'center', fontSize: 20, fontWeight: "bold" }}
                 >{props.booking.title}</Text>
-                <Text>
+                {/* <Text>
                     Paid: ₹{props.booking.paidamount}
                 </Text>
+                <Text>
+                    Paid: ₹{props.booking.confirmed ? <Text>True</Text> : <Text>False</Text>}
+                </Text> */}
                 <TouchableOpacity
                     style={{
                         borderRadius: 10,
@@ -27,11 +30,11 @@ const BookingCard = props => {
                         alignItems: 'center',
                         elevation: 5,
                     }}
-                    onPress={() => { props.method() }}>
+                    onPress={() => { props.booking.confirmed ? props.method():null }}>
                     <Text
                         style={{ color: 'white', fontWeight: 'bold' }}
                     >
-                        GET INVOICE
+                        {props.booking.confirmed ? <Text>Get Invoice</Text> : <Text>Pending</Text>}
                     </Text>
                 </TouchableOpacity>
             </View>

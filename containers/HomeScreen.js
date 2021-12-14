@@ -155,7 +155,14 @@ export default function HomeScreen({ navigation }) {
               <View style={{ paddingTop: 10, }}><Text style={{ fontSize: 20, }}>STARTS AT</Text></View>
               <View style={{ paddingTop: 10, paddingBottom: 12, }}><Text style={{ fontSize: 25, color: '#F7DB15', }}>₹ {plan.price}/{plan.priceForDuration}</Text>
               </View>
-              <View style={{ paddingTop: 8, paddingBottom: 15 }}><Button color='#F7DB15' title="SEE ALL PLANS" /></View>
+              <View style={{ paddingTop: 8, paddingBottom: 15 }}>
+              <Button
+                color="#F7DB15"
+               onPress={() => {
+                navigation.navigate("Room", { roomId: plan.id })
+               }}
+               title="SEE ALL PLANS" />
+               </View>
 
             </View>
           </TouchableOpacity>

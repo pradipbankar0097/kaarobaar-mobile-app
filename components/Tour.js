@@ -3,6 +3,8 @@ import {
     Button,
     StyleSheet,
     Text,
+    Image,
+    ImageBackground,
     View,
 } from 'react-native';
 
@@ -16,11 +18,14 @@ const styles = StyleSheet.create({
         flex: 1
     },
     slide: {
-        padding: 15,
+        padding: 0,
         flex: 1
         ,
+        height: '100%',
+        width: '100%',
         flexDirection: "column",
         justifyContent: "flex-end",
+        position: 'absolute'
 
     },
     slide1: {
@@ -36,14 +41,37 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 32,
     },
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+    },
+    backgroundContainer: {
+        flex: 1,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+    },
+    bakcgroundImage: {
+        flex: 1,
+        width: null,
+        height: null
+    },
+    loginButton: {
+        marginBottom:20 ,
+        width: '100%'
+    }
 });
 
 const MyComponent = (props) => (
     <SwipeableViews style={styles.slideContainer}>
         <View style={[styles.slide, styles.slide1]}>
-            <Text style={styles.text}>
-                slide n°1
-            </Text>
+            <Image style={styles.bakcgroundImage} source={require('../assets/tour_images/img.png')} />
+
+
         </View>
         <View style={[styles.slide, styles.slide2]}>
             <Text style={styles.text}>
@@ -51,13 +79,25 @@ const MyComponent = (props) => (
             </Text>
         </View>
         <View style={[styles.slide, styles.slide3]}>
+            <View style={styles.bakcgroundImage}>
+                <Image style={{ height: '100%', width: '100%' }} source={require('../assets/tour_images/img.png')} />
 
+            </View>
 
-            <Text style={styles.text}>
-                slide n°3
-            </Text>
-            <Button onPress={() => { props.method(true)}} title='Get started' color="#841584" />
+            <View style={{ marginBottom: 40 }}>
+                <Button onPress={() => { props.method(true) }} title='Get started' color="white" />
 
+            </View>
+
+        </View>
+        <View style={styles.container}>
+            <View style={styles.backgroundContainer}>
+                <Image style={styles.bakcgroundImage} source={require('../assets/tour_images/img.png')} />
+            </View>
+            <View style={styles.loginButton}>
+                <Button onPress={() => { props.method(true) }} title='Get started' color="white" />
+
+            </View>
         </View>
     </SwipeableViews>
 );

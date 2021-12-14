@@ -32,6 +32,7 @@ const Stack = createStackNavigator();
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [userToken, setUserToken] = useState(null);
+
   const getToken = () => {
     if (userToken) {
       return userToken;
@@ -56,7 +57,7 @@ export default function App() {
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
-      
+
       // We should also handle error for production apps
       const userToken = await AsyncStorage.getItem("userToken");
 
@@ -115,7 +116,7 @@ export default function App() {
                           headerRight: () => (
                             <Button
                               onPress={() => alert('This is a button!')}
-                              title="Free Trail!"
+                              title="Free Trial!"
                               color="#f7db15"
                             />
                           ),
@@ -165,6 +166,7 @@ export default function App() {
                       />
 
                     ),
+
                   }}
                 >
 
@@ -172,7 +174,9 @@ export default function App() {
                     <Stack.Navigator>
                       <Stack.Screen
                         name="MyBookings"
-                        options={{ title: "MyBookings", tabBarLabel: "MyBookins" }}
+                        options={{
+                          title: "MyBookings", tabBarLabel: "MyBookins",
+                        }}
                       >
                         {() => <BookingScreen getToken={getToken} setToken={setToken} />}
                       </Stack.Screen>

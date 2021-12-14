@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import {
     SafeAreaView,
+    RefreshControl,
     StyleSheet,
     StatusBar,
     Text,
@@ -35,10 +36,22 @@ const firebaseConfig = {
     measurementId: "G-VSG6MB0S61"
 };
 
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
 const BookingScreen = props => {
     const [myBookings, setMyBookings] = useState([]);
-    const [once, setOnce] = useState("");
-    const [loading,setLoading] = useState(true);
+    const [once, setOnce] = useState(true);
+    const [loading, setLoading] = useState(true);
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+
+        wait(2000).then(() => setRefreshing(false));
+    }, []);
 
     const saveFile = async (fileUri) => {
         const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -48,6 +61,7 @@ const BookingScreen = props => {
             alert("Invoice can be found in gallery");
         }
     }
+
     const downloadFile = (img_uri, str) => {
         const uri = img_uri;
         let fileUri = FileSystem.documentDirectory + str + ".png";
@@ -57,10 +71,10 @@ const BookingScreen = props => {
             })
             .catch(error => {
                 console.error(error);
-                
-                
+
+
             })
-            setLoading(false);
+        setLoading(false);
     }
 
 
@@ -87,10 +101,13 @@ const BookingScreen = props => {
                 .then((docs) => {
                     if (!docs.empty) {
                         console.log("bookings found");
+                        setMyBookings([]);
                         docs.forEach((doc) => {
+
                             console.log(JSON.stringify(doc.data()));
                             var toAppend = doc.data();
                             toAppend.bookingid = doc.id;
+                            
                             setMyBookings((prev) => {
                                 return [...prev, toAppend];
                             });
@@ -103,7 +120,7 @@ const BookingScreen = props => {
         }
         getBookingDetails();
         setLoading(false);
-    }, [once]);
+    }, [refreshing]);
 
     const getInvoice = () => {
         console.log('called');
@@ -116,9 +133,9 @@ const BookingScreen = props => {
             .then((url) => {
                 //from url you can fetched the uploaded image easily
                 console.log(url);
-               
+
                 downloadFile(url, str);
-                
+
             })
             .catch((error) => {
 
@@ -129,19 +146,26 @@ const BookingScreen = props => {
 
     };
     return (
-        loading?<ActivityIndicator size="large" color="blue"/>:<ScrollView
-        style={{
-            flex: 1,
-            backgroundColor: 'white',
-        }}
-    >
-        {
-            myBookings.map((booking) => {
+        loading ? <ActivityIndicator size="large" color="blue" /> : <ScrollView
+            style={{
+                flex: 1,
+                backgroundColor: 'white',
+            }}
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                />
+            }
+        >
+            {
+                myBookings.map((booking) => {
 
-                return <BookingCard booking={booking} method={getInvoice} />
-            })
-        }
-    </ScrollView>
+                    return <BookingCard booking={booking} method={getInvoice} />
+                })
+            }
+            <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 50 }}><Text>swipe down to refresh</Text></View>
+        </ScrollView>
     )
 }
 
