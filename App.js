@@ -25,6 +25,40 @@ import GoBack from "./components/GoBack.js";
 import { LogBox } from "react-native";
 import BookingScreen from "./containers/BookingScreen";
 
+// for email
+// send-email.js
+import qs from 'qs';
+import { Linking } from 'react-native';
+
+
+export async function sendEmail(to, subject, body, options = {}) {
+  const { cc, bcc } = options;
+
+  let url = `mailto:${to}`;
+
+  // Create email link query
+  const query = qs.stringify({
+    subject: subject,
+    body: body,
+    cc: cc,
+    bcc: bcc
+  });
+
+  if (query.length) {
+    url += `?${query}`;
+  }
+
+  // check if we can use this link
+  const canOpen = await Linking.canOpenURL(url);
+
+  if (!canOpen) {
+    throw new Error('Provided URL can not be handled');
+  }
+
+  return Linking.openURL(url);
+}
+
+
 LogBox.ignoreAllLogs(true);
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -52,6 +86,19 @@ export default function App() {
     }
 
     setUserToken(token);
+  };
+
+  const sendMailForTrial = (params) => {
+
+    sendEmail(
+      'hello@kaarobaar.co.in',
+      'Asking for a Free Trial!',
+      'Hello, I would like to have a free trial of one of your services. My mobile number is ...',
+      
+    ).then(() => {
+      console.log('Your message was successfully sent!');
+    });
+
   };
 
   useEffect(() => {
@@ -115,8 +162,8 @@ export default function App() {
                           headerStyle: { backgroundColor: "white" },
                           headerRight: () => (
                             <Button
-                              onPress={() => alert('This is a button!')}
-                              title="Free Trial!"
+                              onPress={sendMailForTrial}
+                              title="Free Trail!"
                               color="#f7db15"
                             />
                           ),
