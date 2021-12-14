@@ -107,7 +107,7 @@ const BookingScreen = props => {
                             console.log(JSON.stringify(doc.data()));
                             var toAppend = doc.data();
                             toAppend.bookingid = doc.id;
-                            
+
                             setMyBookings((prev) => {
                                 return [...prev, toAppend];
                             });
@@ -119,15 +119,18 @@ const BookingScreen = props => {
                 });
         }
         getBookingDetails();
+        console.log("This is what i am looking for")
+        console.log(myBookings)
         setLoading(false);
     }, [refreshing]);
 
-    const getInvoice = () => {
+    const getInvoice = (bookingid) => {
         console.log('called');
         // getPermissionAndroid();
         setLoading(true);
         var str = props.getToken();
-        let imageRef = firebase.storage().ref("images/" + str + "/profilepic/img");
+        let imageRef = firebase.storage().ref("images/invoices/" + str + "/" + bookingid + "/invoice");
+        // '/images/invoices/' + userId + '/' + bookingId + '/invoice'
         imageRef
             .getDownloadURL()
             .then((url) => {
@@ -143,6 +146,7 @@ const BookingScreen = props => {
 
 
             });
+
 
     };
     return (
@@ -161,7 +165,7 @@ const BookingScreen = props => {
             {
                 myBookings.map((booking) => {
 
-                    return <BookingCard booking={booking} method={getInvoice} />
+                    return <BookingCard id={booking.bookingid} booking={booking} method={getInvoice} />
                 })
             }
             <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 50 }}><Text>swipe down to refresh</Text></View>

@@ -30,11 +30,12 @@ const BookingCard = props => {
                         alignItems: 'center',
                         elevation: 5,
                     }}
-                    onPress={() => { props.booking.confirmed ? props.method():null }}>
+                    onPress={() => { props.booking.confirmed ? props.method(props.booking.bookingid) : null }}>
                     <Text
                         style={{ color: 'white', fontWeight: 'bold' }}
                     >
                         {props.booking.confirmed ? <Text>Get Invoice</Text> : <Text>Pending</Text>}
+                        
                     </Text>
                 </TouchableOpacity>
             </View>
